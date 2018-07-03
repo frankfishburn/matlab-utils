@@ -1,4 +1,4 @@
-function [fig,ax,model] = scatterfit( xdata , ydata , weights , robust , modelspec )
+function [fig,ax,model,txt] = scatterfit( xdata , ydata , weights , robust , modelspec )
 % Create a scatterplot with weighted/robust regression fit and confidence
 % bounds
 %
@@ -78,7 +78,8 @@ r = sign(mdl.Coefficients.Estimate(end)) * sqrt(mdl.Rsquared.Ordinary);
 df = length(ydata) - 2;
 t = r .* sqrt(df ./ (1 - r.^2));
 p = 2*tcdf(-abs(t),df);
-fprintf('r(%i) = %4.4f, p < %4.4f\n',df,r,p);
+txt=sprintf('r(%i) = %4.4f, p < %4.4f',df,r,p);
+fprintf('%s\n',txt);
 
 %% Export handles and model
 if nargout>2
