@@ -24,11 +24,15 @@ font_size = 12;
 %% Normalize weights so mean is 1
 weights = weights ./ mean(weights);
 
-%% Remove NaN observations
-bad = isnan(xdata) | isnan(ydata) | isnan(weights);
+%% Remove NaN and infinite observations
+bad = isnan(xdata) | isnan(ydata) | isnan(weights) | ~isfinite(xdata) | ~isfinite(ydata) | ~isfinite(weights);
 xdata(bad,:)=[];
 ydata(bad,:)=[];
 weights(bad,:)=[];
+if isempty(xdata) || isempty(ydata) || isempty(weights)
+    warning('No good data. Aborting.');
+    return;
+end
 
 %% Determine axis limits
 xmin = min(xdata); xmax = max(xdata);
