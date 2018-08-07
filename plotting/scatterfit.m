@@ -41,7 +41,7 @@ xunit = 10^floor(log10(xmax-xmin));
 yunit = 10^floor(log10(ymax-ymin));
 xlim = [floor(xmin/xunit) ceil(xmax/xunit)] * xunit;
 ylim = [floor(ymin/yunit) ceil(ymax/yunit)] * yunit;
-assert(all(xdata>xlim(1)) && all(xdata<xlim(2)) && all(ydata>ylim(1)) && all(ydata<ylim(2)),'Data falls outside of axis limits!');
+assert(all(xdata>=xlim(1)) && all(xdata<=xlim(2)) && all(ydata>=ylim(1)) && all(ydata<=ylim(2)),'Data falls outside of axis limits!');
 
 %% Center x-data in case quadratic predictor
 mu = nanmean(xdata);
