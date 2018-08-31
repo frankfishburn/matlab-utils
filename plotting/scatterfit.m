@@ -35,10 +35,10 @@ if isempty(xdata) || isempty(ydata) || isempty(weights)
 end
 
 %% Determine axis limits
-xmin = min(xdata); xmax = max(xdata);
-ymin = min(ydata); ymax = max(ydata);
-xunit = 10^floor(log10(xmax-xmin));
-yunit = 10^floor(log10(ymax-ymin));
+xmin = min(xdata) - min(xdata)*10^-6; xmax = max(xdata) + max(xdata)*10^-6;
+ymin = min(ydata) - min(ydata)*10^-6; ymax = max(ydata) + max(ydata)*10^-6;
+xunit = 10^floor(log10(xmax-xmin)) / 2;
+yunit = 10^floor(log10(ymax-ymin)) / 2;
 xlim = [floor(xmin/xunit) ceil(xmax/xunit)] * xunit;
 ylim = [floor(ymin/yunit) ceil(ymax/yunit)] * yunit;
 assert(all(xdata>=xlim(1)) && all(xdata<=xlim(2)) && all(ydata>=ylim(1)) && all(ydata<=ylim(2)),'Data falls outside of axis limits!');
