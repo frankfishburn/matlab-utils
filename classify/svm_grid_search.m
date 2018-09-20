@@ -15,12 +15,13 @@ res = struct;
 cv = cvpartition(length(y),'KFold',K_folds);
 
 %% initial grid
+max_iter = 10;
 c_range = [-20 20];
 g_range = [-20 20];
 if length(N_density)==1, N_density(2)=N_density(1); end
 
 iter = 0; prevAcc = -inf; curAcc = 0;
-while iter<10 && (curAcc-prevAcc)>.005
+while iter<max_iter && (curAcc-prevAcc)>.005
     
     iter=iter+1;
     
@@ -66,6 +67,10 @@ while iter<10 && (curAcc-prevAcc)>.005
     res(iter).best = curAcc;
     
     fprintf('<strong>completed. Accuracy = %4.4f (%+4.4g)</strong>\n',curAcc,curAcc-prevAcc);
+    
+    if N_density==1
+        break;
+    end
         
 end
 
@@ -99,8 +104,14 @@ g_range = [g_list(min(J))-2*g_unit , g_list(max(J))+2*g_unit];
 end
 
 function [c_list,g_list] = generate_grids(c_lim,g_lim,N)
-c_list = linspace(c_lim(1),c_lim(2),N(1));
-g_list = linspace(g_lim(1),g_lim(2),N(2));
+if N==1
+    nfeat = evalin('caller','size(X,2)');
+    c_list = log2(1);
+    g_list = log2(1/nfeat);
+else
+    c_list = linspace(c_lim(1),c_lim(2),N(1));
+    g_list = linspace(g_lim(1),g_lim(2),N(2));
+end
 end
 
 function [accmean,aucmean] = process_grid(y,X,c_list,g_list,cv)
