@@ -9,8 +9,22 @@ function [Xwh,W] = whiten_data( X , method )
 % Outputs: Xwh    - Whitened data, a [ #observations x #features ] matrix
 %          W      - The whitening matrix, [ #features x #features ] matrix
 %
-% Kessy, A., Lewin, A., Strimmer, K. (2015). "Optimal whitening and decorrelation". The American Statistician. arXiv:1512.00809. doi:10.1080/00031305.2016.1277159
+% Methods:
+%   ZCA     Maximizes the average covariance between original and whitened components
+%   ZCA-cor Maximuzes the average correlation between original and whitened components
+%   PCA     Maximizes the compression of elements based on covariance
+%   PCA-cor Maximizes the compression of elements based on correlation
+%
+% Note that the whitened output will be shifted and scaled from the input. If this is
+%   undesirable, you should standardize before and unstandardize afterward, see also DECORRELATE
+%
+% Kessy, A., Lewin, A., Strimmer, K. (2015). "Optimal whitening and decorrelation". 
+% The American Statistician. arXiv:1512.00809. doi:10.1080/00031305.2016.1277159
 assert(any(strcmpi({'ZCA','PCA','cholesky','chol','ZCA-cor','PCA-cor'},method)),sprintf('Unrecognized method: %s',method));
+
+if size(X,2)>size(X,1)
+    warning('Matrix is wide, result may not be valid');
+end
 
 if strcmpi(method,'ZCA') || strcmpi(method,'PCA')
     
